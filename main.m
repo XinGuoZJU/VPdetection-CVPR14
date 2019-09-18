@@ -28,10 +28,9 @@ addpath lib
 clear
 close all
 
-img_in =  'test.jpg'; % input image
+img_in =  'image/test.jpg'; % input image
 
-
-folder_out = '.'; % output folder
+folder_out = 'results'; % output folder
 
 manhattan = 0;
 acceleration = 1;

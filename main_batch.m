@@ -53,7 +53,7 @@ for i = 1: length(subdir)
         save_dir = strsplit(img_in, '.');
         save_dir2 = char(save_dir(1));
         save_dir3 = strsplit(save_dir2, '/');
-        save_dir3{1} = 'result';
+        save_dir3{1} = 'results';
         folder_out = strjoin(save_dir3, '/');
         mkdir(folder_out);
         horizon = detect_vps(img_in, folder_out, manhattan, acceleration, focal_ratio, params);
