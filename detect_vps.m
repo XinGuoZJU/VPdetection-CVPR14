@@ -167,9 +167,9 @@ end
 % compute horizon line
 if ~isempty(mvp_all);
     if params.MANHATTAN
-        [horizon_line, vpimg] = compute_horizon_line_manhattan(mvp_all, NFAs, lines_lsd, params);
+        [horizon_line, vpimg, group_ind] = compute_horizon_line_manhattan(mvp_all, NFAs, lines_lsd, params);
     else
-        [horizon_line, vpimg] = compute_horizon_line_non_manhattan(mvp_all, NFAs, lines_lsd, params);
+        [horizon_line, vpimg, group_ind] = compute_horizon_line_non_manhattan(mvp_all, NFAs, lines_lsd, params);
     end
 else
     horizon_line = [];
@@ -184,9 +184,9 @@ end
 save_path = [folder_out, '/data.mat'];
 prediction.image_path = img_in;
 prediction.image_size = image_size;
-prediction.lines = lines;
+prediction.lines = lines_lsd;
 prediction.vpimg = vpimg;
-prediction.group = '';
+prediction.group = group_ind;
 save(save_path, 'prediction');
 
 

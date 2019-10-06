@@ -1,4 +1,4 @@
-function img2 = draw_segments(img, vpimg, lines, params, draw_dashed)
+function [img2, ind] = draw_segments(img, vpimg, lines, params, draw_dashed)
 % Overlays line segments and vanishing directions on image
 % Author: Jose Lezama <jlezama@gmail.com>
 
@@ -39,7 +39,7 @@ for i=1:V
     vp = vpimg(:,i)';
     
     %     %%%%%%%%%%%%
-    mp =[lines(:,1)+(lines(:,3)-lines(:,1))/2, lines(:,2)+(lines(:,4)-lines(:,2))/2];
+    mp =[lines(:,1)+(lines(:,3)-lines(:,1))/2, lines(:,2)+(lines(:,4)-lines(:,2))/2];  % middle point
     
     L = size(lines,1);
     O = ones(L,1);
@@ -47,7 +47,7 @@ for i=1:V
     vpmat = my_repmat2(vp,[L 1]);
     
     
-    VP = my_cross([mp O], [vpmat O]);
+    VP = my_cross([mp O], [vpmat O]); % the line of middle point and endspoint
     VP3 = my_repmat(VP(:,3),[1 3]);
     VP = VP./VP3;
     
@@ -65,7 +65,7 @@ for i=1:V
     
     normA = sqrt(A(:,1).^2+A(:,2).^2);
     normB = sqrt(B(:,1).^2+B(:,2).^2);
-    
+   
     A = A./my_repmat(normA,[1 2]);
     B = B./my_repmat(normB,[1 2]);
     
@@ -85,11 +85,16 @@ end
 [angles I] = min(assign',[],1);
 z = find(angles<THRESHOLD);
 
+z_not = find(angles>=THRESHOLD);
+ind = I;
+ind(z_not) = 0;
+
 if DEBUG
     figure, imagesc(img)
     title('debug')
     hold on
 end
+
 
 for i=1:length(z)
     lt = lines(z(i),:);

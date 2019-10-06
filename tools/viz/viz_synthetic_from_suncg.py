@@ -25,7 +25,7 @@ def visualize(line_seg, pred_group, save_name, vp=None):
         axis_list = [(-1) ** (i + 1) * 1 + int(axis_list[i]) for i in range(4)]
     else:
         axis_list = [-10, 10, -10, 10]
-    axis_list = [-10, 10, -10, 10]
+    axis_list = [-5, 5, -5, 5]
     plt.axis(axis_list)
 
     if vp is not None:
@@ -44,7 +44,7 @@ def visualize(line_seg, pred_group, save_name, vp=None):
         group = int(pred_group[i])
         
         #######
-        threshold = 50
+        threshold = 10
         if log[group+1] > threshold:
             continue
         log[group+1] += 1

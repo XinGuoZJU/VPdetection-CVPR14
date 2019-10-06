@@ -1,4 +1,4 @@
-function [Y, vpimg] = compute_horizon_line_non_manhattan(mvp_all, NFAs, lines_lsd, params);
+function [Y, vpimg, ind] = compute_horizon_line_non_manhattan(mvp_all, NFAs, lines_lsd, params);
 % Computes the horizon line when the Manhattan-world hypothesis cannot be
 % assumed.
 %
@@ -197,7 +197,7 @@ vpimg = [horizontal_vps vertical_vp];
 %% draw segments with colors
 if params.PRINT
     imgo = imread(params.img_in);
-    img = draw_segments(imgo, vpimg, lines_lsd, params);
+    [img, ind] = draw_segments(imgo, vpimg, lines_lsd, params);
     
     % draw horizon line
     linewidth = 6;
@@ -228,7 +228,7 @@ if params.PRINT
     
         % save image for each VP
     for i=1:size(vpimg,2);
-        img = draw_segments(imgo,vpimg(:,i), lines_lsd, params, 1);
+        [img, ind_no] = draw_segments(imgo, vpimg(:,i), lines_lsd, params, 1);
         imwrite(img,sprintf('%s/final_vp_%i.png',params.folder_out,i));
     end
 end

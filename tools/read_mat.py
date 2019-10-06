@@ -10,22 +10,14 @@ def load_data(data_name):
     image_path, image_size, line_segs, vps, group  = prediction
     
     image_path = image_path[0]
+    image_size = image_size.tolist()
     image_size = [image_size[0][1], image_size[0][0]]  # height x width
-    
-    vps = np.array(vps).T.tolist()
+   
+    line_segs = line_segs.tolist()
+    vps = vps.T.tolist()
+    group = (group[0].astype(np.int) - 1).tolist()
 
     return image_path, image_size, line_segs, vps, group
-
-
-def group2group(group, line_number):
-    # group: group_number x ind
-    group_output = -np.ones(line_number).astype(np.int)
-    group_number = len(group)
-    for g in range(group_number):
-        for ind in group[g]:
-            group_output[ind - 1] = g
-
-    return group_output.tolist() 
 
 
 def point2line(end_points):
@@ -76,8 +68,7 @@ def process(data_list, save_path):
             vps_output.append(new_vp)
 
         line_segs_output, new_lines_output = lineseg2line(line_segs, image_size)
-        #group_output = group2group(group, len(line_segs))
-        group_output = [0] * len(line_segs_output)
+        group_output = group
 
         image_name = image_path.split('/')[-1]
         json_out = {'image_path': image_name, 'line': new_lines_output, 'org_line': line_segs_output, 

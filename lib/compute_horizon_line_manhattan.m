@@ -1,5 +1,5 @@
 
-function [Y, vpoimg] = compute_horizon_line_manhattan(mvp_all, NFAs, lines_lsd, params);
+function [Y, vpoimg, ind] = compute_horizon_line_manhattan(mvp_all, NFAs, lines_lsd, params);
 % computes horizontal line from vps and using the NFA values to apply
 % orthogonality constraints. saves data to output image and output text
 % file
@@ -79,7 +79,7 @@ Y = polyval(P_ours,X);
 % draw segments with colors
 if params.PRINT
     imgo = imread(params.img_in);
-    img = draw_segments(imgo,vpoimg, lines_lsd, params);
+    [img, ind] = draw_segments(imgo,vpoimg, lines_lsd, params);
     
     % draw horizon line
     linewidth = 4;
@@ -108,7 +108,7 @@ if params.PRINT
     
     % save image for each VP
     for i=1:size(vpoimg,2);
-        img = draw_segments(imgo,vpoimg(:,i), lines_lsd, params, 1);
+        [img, ind_no] = draw_segments(imgo,vpoimg(:,i), lines_lsd, params, 1);
         imwrite(img,sprintf('%s/final_vp_%i.png',params.folder_out,i));
     end
     
