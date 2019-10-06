@@ -1,4 +1,4 @@
-function [horizon_line, vpimg] = detect_vps(img_in,folder_out,...
+function [horizon_line, vpimg] = detect_vps(img_in, folder_out,...
     manhattan, acceleration, focal_ratio, input_params)
 
 % DETECT_VPS
@@ -124,8 +124,11 @@ params.LENGTH_THRESHOLD = sqrt((params.H+params.W))/params.LENGTH_THRESHOLD;
 lines = run_lsd(img_in);
 lines_lsd = lines;
 
+
 % denoise lines
 [lines, line_endpoints] = denoise_lines(lines, params);
+% lines: number x 4
+% lines are all the lines including long lines and short lins; line_endpoints are only short lines
 
 if   params.PRINT
     draw_lines(lines, line_endpoints, params);
@@ -146,20 +149,21 @@ end
 
 
 % refine detections
-mvp_all = refine_detections(mvp_all, lines_lsd, params);
+% mvp_all = refine_detections(mvp_all, lines_lsd, params);
 
 [mvp_all, NFAs] = remove_duplicates(mvp_all, NFAs,params);
+%mvp_all: 2 x num_vp
 
 % draw preliminary detections
 if  params.PRINT
     img = imread(img_in);
-    
-    img2 = draw_segments(img,mvp_all, lines_lsd, params);
+    image_size = size(img);
+    img2 = draw_segments(img, mvp_all, lines_lsd, params);
     imwrite(img2,sprintf('%s/vps_raw.png',params.folder_out));
 
 end
 
-
+% vpimg is filtered from mvp_all
 % compute horizon line
 if ~isempty(mvp_all);
     if params.MANHATTAN
@@ -175,6 +179,16 @@ else
     fprintf(fileID,'No Vanishing Points found.\n');
     fclose(fileID);
 end
+
+
+save_path = [folder_out, '/data.mat'];
+prediction.image_path = img_in;
+prediction.image_size = image_size;
+prediction.lines = lines;
+prediction.vpimg = vpimg;
+prediction.group = '';
+save(save_path, 'prediction');
+
 
 if params.PRINT
     draw_dual_spaces(points_straight, detections_straight, 'straight', vpimg, params)

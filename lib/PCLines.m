@@ -43,7 +43,7 @@ if L==4
     
     m = dy./dx;
     b = (y1.*x2 - y2.*x1)./dx;
-    
+        
     if isequal(space,'straight')
         PCline = [repmat(d,size(b)), b, 1-m]; % homogeneous coordinates
     elseif isequal(space, 'twisted')

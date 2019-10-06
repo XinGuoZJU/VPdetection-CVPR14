@@ -56,7 +56,9 @@ for i = 1: length(subdir)
         save_dir3{1} = 'results';
         folder_out = strjoin(save_dir3, '/');
         mkdir(folder_out);
-        horizon = detect_vps(img_in, folder_out, manhattan, acceleration, focal_ratio, params);
+        try
+            horizon = detect_vps(img_in, folder_out, manhattan, acceleration, focal_ratio, params);
+        end
     end
 end    
 

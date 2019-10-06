@@ -1,4 +1,4 @@
-function img2 = draw_segments(img,vpimg, lines, params, draw_dashed)
+function img2 = draw_segments(img, vpimg, lines, params, draw_dashed)
 % Overlays line segments and vanishing directions on image
 % Author: Jose Lezama <jlezama@gmail.com>
 
