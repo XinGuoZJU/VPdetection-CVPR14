@@ -79,10 +79,10 @@ def process(data_list, save_path):
 
 
 if __name__ == '__main__':
-    path = '/n/fs/vl/xg5/workspace/baseline/VPdetection-CVPR14/demo_data/output/test'
-    data_list = [os.path.join(path, 'data.mat')]
-
-    save_path = 'data/data.json'
+    path = '/n/fs/vl/xg5/workspace/baseline/VPdetection-CVPR14/dataset/YUD/output'
+    data_list = [os.path.join(path, dir_path + '/data.mat') for dir_path in os.listdir(path)]
+    
+    save_path = '/n/fs/vl/xg5/workspace/baseline/VPdetection-CVPR14/dataset/YUD/data/data.json'
     process(data_list, save_path)
     
 

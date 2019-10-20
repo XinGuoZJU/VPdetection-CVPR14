@@ -195,9 +195,9 @@ Y = X*a+Y(1);
 vpimg = [horizontal_vps vertical_vp];
 
 %% draw segments with colors
+imgo = imread(params.img_in);
+[img, ind] = draw_segments(imgo, vpimg, lines_lsd, params);
 if params.PRINT
-    imgo = imread(params.img_in);
-    [img, ind] = draw_segments(imgo, vpimg, lines_lsd, params);
     
     % draw horizon line
     linewidth = 6;
@@ -233,16 +233,17 @@ if params.PRINT
     end
 end
 
-fileID = fopen(sprintf('%s/out.txt',params.folder_out),'w');
-fprintf(fileID,'horizontal vps:\n');
-for i=1:size(horizontal_vps,2);
-    hvp = horizontal_vps(:,i);
-    fprintf(fileID,'(%f, %f)\n',hvp(1), hvp(2));
+if params.PRINT
+    fileID = fopen(sprintf('%s/out.txt',params.folder_out),'w');
+    fprintf(fileID,'horizontal vps:\n');
+    for i=1:size(horizontal_vps,2);
+        hvp = horizontal_vps(:,i);
+        fprintf(fileID,'(%f, %f)\n',hvp(1), hvp(2));
+    end
+    fprintf(fileID,'vertical vp:\n');
+    fprintf(fileID,'(%f, %f)\n',vertical_vp(1), vertical_vp(2));
+    fprintf(fileID,'horizon line:\n');
+    fprintf(fileID,'(%f, %f), (%f, %f)\n',X(1), Y(1), X(end), Y(end));
+    fclose(fileID);
 end
-fprintf(fileID,'vertical vp:\n');
-fprintf(fileID,'(%f, %f)\n',vertical_vp(1), vertical_vp(2));
-fprintf(fileID,'horizon line:\n');
-fprintf(fileID,'(%f, %f), (%f, %f)\n',X(1), Y(1), X(end), Y(end));
-fclose(fileID);
-
-
+end

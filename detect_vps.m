@@ -155,9 +155,9 @@ end
 %mvp_all: 2 x num_vp
 
 % draw preliminary detections
+img = imread(img_in);
+image_size = size(img);
 if  params.PRINT
-    img = imread(img_in);
-    image_size = size(img);
     img2 = draw_segments(img, mvp_all, lines_lsd, params);
     imwrite(img2,sprintf('%s/vps_raw.png',params.folder_out));
 
@@ -185,7 +185,7 @@ save_path = [folder_out, '/data.mat'];
 prediction.image_path = img_in;
 prediction.image_size = image_size;
 prediction.lines = lines_lsd;
-prediction.vpimg = vpimg;
+prediction.vpimg = vpimg;  % For non manhattan The last one is vertical vp, but for manhattan, it is not sure.
 prediction.group = group_ind;
 save(save_path, 'prediction');
 
