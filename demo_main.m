@@ -28,32 +28,16 @@ addpath lib
 clear
 close all
 
-manhattan = 1;
-acceleration = 1;
-
-focal_ratio = 1.08;
-
-params.PRINT = 0;
-params.PLOT = 0;
-
-
 img_in =  'demo_data/imgs/test.jpg'; % input image
 folder_out = 'demo_data/output/test'; % output folder
 mkdir(folder_out)
 
-datapath = '/n/fs/vl/xg5/Datasets/YUD/YorkUrbanDB';
-savepath = 'dataset/YUD/output';
-dirs = dir(datapath);
+manhattan = 0;
+acceleration = 1;
 
-for i = 3:size(dirs,1)
-    dir_name = dirs(i).name;
-    dirpath = [datapath, '/', dir_name];
-    if isdir(dirpath)
-        img_in = [dirpath, '/', dir_name, '.jpg'];
-        folder_out = [savepath, '/', dir_name];
-        mkdir(folder_out)
-        horizon = detect_vps(img_in, folder_out, manhattan, acceleration, focal_ratio, params);
-    end
-end
+focal_ratio = 1.08;
 
+params.PRINT = 1;
+params.PLOT = 1;
 
+horizon = detect_vps(img_in, folder_out, manhattan, acceleration, focal_ratio, params);

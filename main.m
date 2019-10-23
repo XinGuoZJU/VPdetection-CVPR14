@@ -28,16 +28,42 @@ addpath lib
 clear
 close all
 
-img_in =  'demo_data/imgs/test.jpg'; % input image
-folder_out = 'demo_data/output/test'; % output folder
-mkdir(folder_out)
-
-manhattan = 0;
+manhattan = 1;
 acceleration = 1;
 
 focal_ratio = 1.08;
 
-params.PRINT = 1;
-params.PLOT = 1;
+params.PRINT = 0;
+params.PLOT = 0;
 
-horizon = detect_vps(img_in, folder_out, manhattan, acceleration, focal_ratio, params);
+dataset_name = 'YUD';
+if strcmp(dataset_name, 'YUD')
+    datapath = '/n/fs/vl/xg5/Datasets/YUD/YorkUrbanDB';
+    savepath = 'dataset/YUD/output';
+    img_type = 'jpg';
+elseif strcmp(dataset_name, 'scannet')
+    datapath = '/n/fs/vl/xg5/Datasets/neurodata/scannet-vp';
+    savepath = 'dataset/scannet-vp/output';
+    img_type = 'png';
+end
+
+mkdir(folder_out)
+dirs = dir(datapath);
+
+for i = 3:size(dirs,1)
+    dir_name = dirs(i).name;
+    dirpath = [datapath, '/', dir_name];
+    if isdir(dirpath)
+        image_list = dir([dirpath, '/*.', img_type]); % struct
+        for j = 1: size(image_list,1)
+            img_name = image_list(j).name;
+            img_in = [dirpath, '/', img_name];
+            save_img_dir = strsplit(img_name, '.'); % cell
+            folder_out = [savepath, '/', dir_name, '/', save_img_dir{1}];
+            mkdir(folder_out)
+            horizon = detect_vps(img_in, folder_out, manhattan, acceleration, focal_ratio, params);
+        end
+    end
+end
+
+
