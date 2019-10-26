@@ -36,18 +36,28 @@ focal_ratio = 1.08;
 params.PRINT = 0;
 params.PLOT = 0;
 
-dataset_name = 'YUD';
+
+dataset_name = 'SceneCityUrban3D';
+
 if strcmp(dataset_name, 'YUD')
     datapath = '/n/fs/vl/xg5/Datasets/YUD/YorkUrbanDB';
     savepath = 'dataset/YUD/output';
     img_type = 'jpg';
-elseif strcmp(dataset_name, 'scannet')
-    datapath = '/n/fs/vl/xg5/Datasets/neurodata/scannet-vp';
-    savepath = 'dataset/scannet-vp/output';
+elseif strcmp(dataset_name, 'ScanNet')
+    datapath = '/n/fs/vl/xg5/Datasets/ScanNet/scannet-vp';
+    savepath = 'dataset/ScanNet/output';
+    img_type = 'png';
+elseif strcmp(dataset_name, 'SceneCityUrban3D')
+    datapath = '/n/fs/vl/xg5/Datasets/SceneCityUrban3D/su3';
+    savepath = 'dataset/SceneCityUrban3D/output';
+    img_type = 'png';
+elseif strcmp(dataset_name, 'SUNCG')
+    datapath = '/n/fs/vl/xg5/Datasets/SUNCG/mlt_v2';
+    savepath = 'dataset/SUNCG/output';
     img_type = 'png';
 end
 
-mkdir(folder_out)
+
 dirs = dir(datapath);
 
 for i = 3:size(dirs,1)
@@ -60,8 +70,14 @@ for i = 3:size(dirs,1)
             img_in = [dirpath, '/', img_name];
             save_img_dir = strsplit(img_name, '.'); % cell
             folder_out = [savepath, '/', dir_name, '/', save_img_dir{1}];
-            mkdir(folder_out)
-            horizon = detect_vps(img_in, folder_out, manhattan, acceleration, focal_ratio, params);
+            try
+                mkdir(folder_out)
+                horizon = detect_vps(img_in, folder_out, manhattan, acceleration, focal_ratio, params);
+            catch
+                fileID = fopen([dataset_name, '_error.txt'], 'a');
+                fprintf(fileID, [img_in, '\n']);
+                fclose(fileID);
+            end
         end
     end
 end
