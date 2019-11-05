@@ -13,11 +13,9 @@ def load_data(data_name):
     image_size = image_size.tolist()
     image_size = [image_size[0][1], image_size[0][0]]  # height x width
    
-    line_segs = line_segs.tolist()
     vps = vps.T.tolist()
-    group = (group[0].astype(np.int) - 1).tolist()
 
-    return image_path, image_size, line_segs, vps, group
+    return image_path, image_size, vps
 
 
 def point2line(end_points):
@@ -58,7 +56,7 @@ def process(data_list, save_path):
 
     for data_name in data_list:
         print(data_name)
-        image_path, image_size, line_segs, vps, group = load_data(data_name)
+        image_path, image_size, vps = load_data(data_name)
         
         # there are overlap for each group
         # image_size: height x width
@@ -67,21 +65,17 @@ def process(data_list, save_path):
             new_vp = [(vp[1] - image_size[0] / 2) / (image_size[0] / 2), (vp[0] - image_size[1] / 2) / (image_size[1] / 2)]
             vps_output.append(new_vp)
 
-        line_segs_output, new_lines_output = lineseg2line(line_segs, image_size)
-        group_output = group
-
         image_names = image_path.split('/')
         image_name = os.path.join(image_names[-2], image_names[-1])
 
-        json_out = {'image_path': image_name, 'line': new_lines_output, 'org_line': line_segs_output, 
-                'group': group_output, 'vp': vps_output} 
+        json_out = {'image_path': image_name, 'image_size': image_size, 'vp': vps_output} 
 
         json.dump(json_out, save_op)
         save_op.write('\n')
 
 
 if __name__ == '__main__':
-    data_name = 'ScanNet'   # 'YUD', 'ScanNet', 'SceneCityUrban3D', 'SUNCG'
+    data_name = 'YUD'   # 'YUD', 'ScanNet', 'SceneCityUrban3D', 'SUNCG'
 
     path = '/n/fs/vl/xg5/workspace/baseline/VPdetection_CVPR14/dataset/' + data_name + '/output'
     dir_list = [os.path.join(path, dir_path) for dir_path in os.listdir(path)]
@@ -89,9 +83,10 @@ if __name__ == '__main__':
     for dirs in dir_list:
         data_list += [os.path.join(dirs, dir_path + '/data.mat') for dir_path in os.listdir(dirs)]
 
-    save_path = '/n/fs/vl/xg5/workspace/baseline/VPdetection_CVPR14/dataset/' + data_name  + '/data'
+    save_path = '/n/fs/vl/xg5/workspace/baseline/VPdetection_CVPR14/dataset/' + data_name + '/data'
     os.makedirs(save_path, exist_ok=True)
     save_file = os.path.join(save_path, 'data.json')
-    process(data_list, save_file)
 
+    process(data_list, save_file)
+    
 

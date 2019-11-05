@@ -180,7 +180,7 @@ else
     fclose(fileID);
 end
 
-
+mkdir(folder_out);
 save_path = [folder_out, '/data.mat'];
 prediction.image_path = img_in;
 prediction.image_size = image_size;

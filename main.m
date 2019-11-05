@@ -71,7 +71,6 @@ for i = 3:size(dirs,1)
             save_img_dir = strsplit(img_name, '.'); % cell
             folder_out = [savepath, '/', dir_name, '/', save_img_dir{1}];
             try
-                mkdir(folder_out)
                 horizon = detect_vps(img_in, folder_out, manhattan, acceleration, focal_ratio, params);
             catch
                 fileID = fopen([dataset_name, '_error.txt'], 'a');
