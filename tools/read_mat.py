@@ -81,7 +81,7 @@ def process(data_list, save_path):
 
 
 if __name__ == '__main__':
-    data_name = 'ScanNet'   # 'YUD', 'ScanNet', 'SceneCityUrban3D', 'SUNCG'
+    data_name = 'ScanNet_aug'   # 'YUD', 'ScanNet', 'SceneCityUrban3D', 'SUNCG'
 
     path = '/n/fs/vl/xg5/workspace/baseline/VPdetection_CVPR14/dataset/' + data_name + '/output'
     dir_list = [os.path.join(path, dir_path) for dir_path in os.listdir(path)]
